@@ -5,10 +5,6 @@ import csv
 import json
 
 # %%
-#Json FILE PATH
-#jsonFilepath = r"C:\Users\pkatariya\Downloads\2019 03 21 Pinnacle Physical Therapy Services PLLC_Master 2018 (Master) ANC Executed-EXHIBIT.json"
-
-# %%
 # Function to read Textract JSON file
 def read_textract_json(json_file):
     #print(json_file)
@@ -206,9 +202,10 @@ def write_to_csv(output_data, output_file):
 
 # %%
 if __name__ == "__main__":
-    json_folder = 'D:\projects\OCR\client documents\CHC\exhibit-json\exhibit'
-    #json_folder = 'D:\projects\OCR\client documents\CHC\exhbit_json'
-    output_file = 'output.csv'
+    #json_folder = 'D:\projects\OCR\client documents\CHC\exhibit-json\exhibit'
+    #output_file = 'output.csv'
 
+    json_folder = input("Enter JSON folder path: ")
+    output_file = input("Enter output file path: ")
     data = process_textract_files(json_folder)
     write_to_csv(data, output_file)
