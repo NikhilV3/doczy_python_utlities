@@ -81,7 +81,7 @@ def get_exhibit(page_list, response):
         line_block = list(filter(lambda sub: sub["page"] == page and sub["blockType"] == "LINE", response['blocks']))
 
         #iterate only on 1 line items
-        for block in line_block[0:2]:
+        for block in line_block[0:10]:
             if block['blockType'] == 'LINE' and 'text' in block:
                 text = block['text']
                 if re.search(line1_regex, text):
@@ -95,7 +95,7 @@ def get_exhibit_line(page_list, response):
         line_block = list(filter(lambda sub: sub["page"] == page and sub["blockType"] == "LINE", response['blocks']))
 
         #iterate only on 1 line items
-        for i, block in enumerate(line_block[0:3]):
+        for i, block in enumerate(line_block[0:10]):
             if block['blockType'] == 'LINE' and 'text' in block:
                 text = block['text']
                 if re.search(line1_regex, text):
