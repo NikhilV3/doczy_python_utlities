@@ -155,8 +155,8 @@ def process_textract_files(json_folder):
                                     #Selected value logic
                                     selectedValueContent = get_key_value_content(selected_Ids,keyValueSets,words)
 
-                                    #exhibit logic
-                                    page_list = [cell['page']-2,cell['page']-1,cell['page']]
+                                    #exhibit logic to search on 4 previous pages
+                                    page_list = [cell['page']-3,cell['page']-2,cell['page']-1,cell['page']]
                                     exhibit = get_exhibit(page_list, response)
 
                                     #exhibit line logic
@@ -181,11 +181,14 @@ def process_textract_files(json_folder):
                                     if(serviceschilds_set & selectedBlocksIds_set):
                                         services_selected_ids = serviceschilds_set & selectedBlocksIds_set
                                          #Iterate over SET
+                                        servicesSelectedValueContent = ""
                                         for services_selected_Id in services_selected_ids:
-                                            #Selected value logic
-                                            servicesSelectedValueContent = get_key_value_content(services_selected_Id,keyValueSets,words)
-                                            print(filename,exhibit,exhibit_line,selectedValueContent,servicesSelectedValueContent,reimbursement,reimbursement2,cell['page'])
-                                            output_data.append([filename, exhibit, exhibit_line, selectedValueContent,servicesSelectedValueContent,reimbursement,reimbursement2,cell['page']])
+                                            #Selected value logic, comma separated services
+                                            servicesSelectedValueContent = servicesSelectedValueContent + "," + get_key_value_content(services_selected_Id,keyValueSets,words)
+                                        
+                                        servicesSelectedValueContent = servicesSelectedValueContent.strip(",")
+                                        print(filename,exhibit,exhibit_line,selectedValueContent,servicesSelectedValueContent,reimbursement,reimbursement2,cell['page'])
+                                        output_data.append([filename, exhibit, exhibit_line, selectedValueContent,servicesSelectedValueContent,reimbursement,reimbursement2,cell['page']])
                                     else:
                                         print(filename,exhibit,exhibit_line,selectedValueContent,"",reimbursement,cell['page'])
                                         output_data.append([filename, exhibit, exhibit_line, selectedValueContent,"",reimbursement,reimbursement2,cell['page']])
