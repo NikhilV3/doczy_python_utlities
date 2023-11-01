@@ -101,6 +101,19 @@ def get_exhibit_line(page_list, response):
                 if re.search(line1_regex, text):
                     return line_block[i+1]['text']
 
+def find_max_value_in_list_of_dicts(data, key_to_maximize):
+    # Initialize the maximum value with negative infinity
+    max_value = float('-inf')
+
+    # Iterate over the list of dictionaries
+    for item in data:
+        # Get the value for the specified key
+        value = item.get(key_to_maximize, 0)  # 0 is a default value if the key is missing
+        # Update the maximum value if the current value is greater
+        if value > max_value:
+            max_value = value
+
+    return max_value
 # %%
 # Function to process Textract JSON files
 def process_textract_files(json_folder):
@@ -126,16 +139,18 @@ def process_textract_files(json_folder):
             # %%
             #Get TABLE which CELL has SELECTED IDs
             print(filename)
+            print(selectedBlocksIds)
             for idx, table in enumerate(tables.values()):
                 # Determine all the cells that belong to this table
                 table_cells = [cells[cell_id] for cell_id in get_children_ids(table)]
+                columns = find_max_value_in_list_of_dicts(table_cells,"columnIndex")
+                #rows = find_max_value_in_list_of_dicts(table_cells,"rowIndex")
 
                 #print("Correct table", get_cell_content(table_cells[0],words),  table_cells[0]['page'])
 
                 # Determine correct table
-                if("COLUMN_HEADER" in table_cells[0]['entityTypes'] and get_cell_content(table_cells[0],words)=="Type"):
+                if(("COLUMN_HEADER" in table_cells[0]['entityTypes'] and get_cell_content(table_cells[0],words)=="Type") or (len(table_cells[0]['entityTypes']) == 0 and columns == 3)):
                     
-
                     for cell in table_cells:
                         if(cell['columnIndex']==1):
                             #print(cell)
@@ -143,9 +158,9 @@ def process_textract_files(json_folder):
                             childs = [cell_child for cell_child in get_children_ids(cell)]
                             childs_set = set(childs)
                             selectedBlocksIds_set = set(selectedBlocksIds)
-
+                            #print(childs_set)
                             if(childs_set & selectedBlocksIds_set):
-                                #print(childs_set & selectedBlocksIds_set)
+                                
                                 #print(get_cell_content(cell,words))
                                 cell_selected_ids = childs_set & selectedBlocksIds_set
                                 #Iterate over SET
@@ -192,6 +207,7 @@ def process_textract_files(json_folder):
                                     else:
                                         print(filename,exhibit,exhibit_line,selectedValueContent,"",reimbursement,cell['page'])
                                         output_data.append([filename, exhibit, exhibit_line, selectedValueContent,"",reimbursement,reimbursement2,cell['page']])
+                
     return output_data
 
 #Get associated cells in a row
