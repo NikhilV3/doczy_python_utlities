@@ -167,6 +167,8 @@ def process_textract_files(json_folder):
                                 for selected_Ids in cell_selected_ids:
                                     #print(selected_Ids)
 
+                                    selectionConfidence = selectedBlocks[selected_Ids]['confidence']
+
                                     #Selected value logic
                                     selectedValueContent = get_key_value_content(selected_Ids,keyValueSets,words)
 
@@ -202,11 +204,11 @@ def process_textract_files(json_folder):
                                             servicesSelectedValueContent = servicesSelectedValueContent + "," + get_key_value_content(services_selected_Id,keyValueSets,words)
                                         
                                         servicesSelectedValueContent = servicesSelectedValueContent.strip(",")
-                                        print(filename,exhibit,exhibit_line,selectedValueContent,servicesSelectedValueContent,reimbursement,reimbursement2,cell['page'])
-                                        output_data.append([filename, exhibit, exhibit_line, selectedValueContent,servicesSelectedValueContent,reimbursement,reimbursement2,cell['page']])
+                                        print(filename,exhibit,exhibit_line,selectedValueContent,servicesSelectedValueContent,reimbursement,reimbursement2,cell['page'],selectionConfidence)
+                                        output_data.append([filename, exhibit, exhibit_line, selectedValueContent,servicesSelectedValueContent,reimbursement,reimbursement2,cell['page'],selectionConfidence])
                                     else:
                                         print(filename,exhibit,exhibit_line,selectedValueContent,"",reimbursement,cell['page'])
-                                        output_data.append([filename, exhibit, exhibit_line, selectedValueContent,"",reimbursement,reimbursement2,cell['page']])
+                                        output_data.append([filename, exhibit, exhibit_line, selectedValueContent,"",reimbursement,reimbursement2,cell['page'],selectionConfidence])
                 
     return output_data
 
