@@ -104,12 +104,13 @@ def process_textract_files(json_folder):
                 table_cells = [cells[cell_id] for cell_id in get_children_ids(table)]
 
                 #print("Correct table", get_cell_content(table_cells[0],words),  table_cells[0]['page'])
-
+                columns = find_max_value_in_list_of_dicts(table_cells,"columnIndex")
+                rows = find_max_value_in_list_of_dicts(table_cells,"rowIndex")
+                
                 # Determine correct table
-                if("COLUMN_HEADER" in table_cells[0]['entityTypes'] and get_cell_content(table_cells[0],words) in ["HCPC","Code","Visit Type","Description","Service","Levels","Service Description","HCPC Code"]):
+                if(("COLUMN_HEADER" in table_cells[0]['entityTypes'] and get_cell_content(table_cells[0],words) in ["HCPC","Code","Visit Type","Description","Service","Levels","Service Description","HCPC Code"]) or ("TABLE_TITLE" in table_cells[0]['entityTypes']  and columns == 3)):
 
-                    columns = find_max_value_in_list_of_dicts(table_cells,"columnIndex")
-                    rows = find_max_value_in_list_of_dicts(table_cells,"rowIndex")
+                    
                     #exhibit logic to search on 4 previous pages
                     page_list = [table_cells[0]['page']-3,table_cells[0]['page']-2,table_cells[0]['page']-1,table_cells[0]['page']]
                     exhibit = get_exhibit(page_list, response)
